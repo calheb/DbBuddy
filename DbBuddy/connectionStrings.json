@@ -1,5 +1,0 @@
-﻿{
-  "LocalDbPath": "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;",
-  "RemoteDbPath": "Server=remoteServerAddress;Database=remoteDataBase;User Id=remoteUsername;Password=remotePassword;",
-  "CurrentDb": "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;"
-}
