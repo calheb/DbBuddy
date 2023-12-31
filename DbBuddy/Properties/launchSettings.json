@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DbBuddy": {
+      "commandName": "Project",
+      "commandLineArgs": "start"
+    }
+  }
+}

@@ -7,10 +7,43 @@ namespace DbBuddy
     class Program
     {
         static ConnectionStrings connectionStrings = new ConnectionStrings();
-
+        static bool isShowingMenu = false;
+        
         static void Main(string[] args)
         {
-            DisplayMainMenu();
+            if (args.Length > 0)
+            {
+                switch (args[0].ToLower())
+                {
+                    case "start":
+                        isShowingMenu = true;
+                        DisplayMainMenu();
+                        break;
+                    case "set":
+                        if (args.Length > 1)
+                        {
+                            if (args[1].ToLower() == "local")
+                            {
+                                ToggleLocalDbActive();
+                            }
+                            else if (args[1].ToLower() == "remote")
+                            {
+                                ToggleRemoteDbActive();
+                            }
+                        }
+                        break;
+                    // You can add more cases here for other commands.
+                    default:
+                        Console.WriteLine("Invalid command");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No arguments provided.");
+                // Optionally, start the main menu by default if no arguments are provided.
+                // DisplayMainMenu();
+            }
         }
 
         static void DisplayMainMenu()
@@ -159,6 +192,7 @@ namespace DbBuddy
                     connectionStrings.LocalDbPath = userInput;
                     connectionStrings.CurrentDb = "local Db";
                     SaveConnectionStrings(connectionStrings);
+                    break;
                 }
             }
 
@@ -185,10 +219,9 @@ namespace DbBuddy
                     connectionStrings.RemoteDbPath = userInput;
                     connectionStrings.CurrentDb = "remote Db";
                     SaveConnectionStrings(connectionStrings);
+                    break;
                 }
             }
-
-            DisplaySettingsMenu();
         }
 
 
@@ -219,8 +252,6 @@ namespace DbBuddy
                     break;
                 }
             }
-
-            DisplaySettingsMenu();
         }
 
 
@@ -245,26 +276,36 @@ namespace DbBuddy
         }
 
 
-        public static void SaveConnectionStrings(ConnectionStrings connectionStrings)
+        static void SaveConnectionStrings(ConnectionStrings connectionStrings)
         {
             string jsonString = JsonConvert.SerializeObject(connectionStrings);
             File.WriteAllText("connectionStrings.json", jsonString);
-            Console.Clear();
-            DisplayMainMenu();
+            if (isShowingMenu)
+            {
+                Console.Clear();
+                DisplaySettingsMenu();
+            }
         }
 
         public static ConnectionStrings ReadConnectionStrings()
         {
-            string jsonString = File.ReadAllText("connectionStrings.json");
-            if (string.IsNullOrEmpty(jsonString))
+            string filePath = "connectionStrings.json";
+            if (!File.Exists(filePath))
             {
-                return new ConnectionStrings();
+                // Create file with default settings
+                var defaultSettings = new ConnectionStrings
+                {
+                    LocalDbPath = "",
+                    RemoteDbPath = "",
+                    ConfigPath = "",
+                    CurrentDb = ""
+                };
+                File.WriteAllText(filePath, JsonConvert.SerializeObject(defaultSettings));
             }
-            else
-            {
-                return JsonConvert.DeserializeObject<ConnectionStrings>(jsonString);
-            }
+            string jsonString = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<ConnectionStrings>(jsonString);
         }
+
 
         static void ReplaceConnectionStringsBlock(string webConfigPath, string newConnectionStringsBlock)
         {
