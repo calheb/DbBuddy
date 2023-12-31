@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Security;
 using System.Xml;
 using Newtonsoft.Json;
 
@@ -40,7 +40,7 @@ namespace DbBuddy
             }
             else
             {
-                Console.WriteLine("No arguments provided.");
+                Console.WriteLine(@"usage: dbb [start] [set local] [set remote]");
                 // Optionally, start the main menu by default if no arguments are provided.
                 // DisplayMainMenu();
             }
@@ -115,8 +115,10 @@ namespace DbBuddy
             {
                 ShowHeader();
                 Console.WriteLine($"Current project path: \n\t{connectionStrings.ConfigPath} \n");
-                Console.WriteLine($"Current local Db connection string: \n\t{connectionStrings.LocalDbPath}\n");
-                Console.WriteLine($"Current remote Db connection string: \n\t{connectionStrings.RemoteDbPath}\n");
+                Console.WriteLine($"local Db name: \n\t{connectionStrings.LocalDbName}\n");
+                Console.WriteLine($"local Db connection string: \n\t{connectionStrings.LocalDb}\n");
+                Console.WriteLine($"remote Db name: \n\t{connectionStrings.RemoteDbName}\n");
+                Console.WriteLine($"remote Db connection string: \n\t{connectionStrings.RemoteDb}\n");
                 Console.WriteLine();
                 Console.WriteLine("Settings");
                 Console.WriteLine("---------");
@@ -159,8 +161,8 @@ namespace DbBuddy
                     Console.Clear();
                     ShowHeader();
                     Console.WriteLine($"Current project path: \n\t{connectionStrings.ConfigPath} \n");
-                    Console.WriteLine($"Current local Db connection string: \n\t{connectionStrings.LocalDbPath}\n");
-                    Console.WriteLine($"Current remote Db connection string: \n\t{connectionStrings.RemoteDbPath}\n");
+                    Console.WriteLine($"Current local Db connection string: \n\t{connectionStrings.LocalDb}\n");
+                    Console.WriteLine($"Current remote Db connection string: \n\t{connectionStrings.RemoteDb}\n");
                     Console.WriteLine();
                     Console.WriteLine("Settings");
                     Console.WriteLine("---------");
@@ -172,58 +174,77 @@ namespace DbBuddy
             }
         }
 
-
         static void DisplaySetLocalDbMenu()
         {
             while (true)
             {
                 ShowHeader();
-                Console.WriteLine($"Current local connection string: \n{connectionStrings.LocalDbPath}\n");
-                Console.WriteLine("Enter your local Db connection string or [x] to return to the settings menu:");
-                var userInput = Console.ReadLine() ?? string.Empty;
-
-                if (userInput == "x")
+                Console.WriteLine("Enter the name of the Local Db (maps to the name in the connection string) [x] to return to the settings menu:");
+                var userInput1 = Console.ReadLine() ?? string.Empty;
+                if (userInput1 == "x")
                 {
                     Console.Clear();
-                    break; // Exits the loop and goes back to the previous menu
+                    break;
                 }
                 else
                 {
-                    connectionStrings.LocalDbPath = userInput;
-                    connectionStrings.CurrentDb = "local Db";
+                    connectionStrings.LocalDbName = userInput1;
+                }
+
+                Console.WriteLine($"Current Local Db connection string: \n{connectionStrings.LocalDb}\n");
+                Console.WriteLine("Enter your Local Db connection string or [x] to return to the settings menu:");
+                var userInput2 = Console.ReadLine() ?? string.Empty;
+
+                if (userInput2 == "x")
+                {
+                    Console.Clear();
+                    break;
+                }
+                else
+                {
+                    connectionStrings.LocalDb = userInput2;
+                    connectionStrings.CurrentDb = "Local Db";
                     SaveConnectionStrings(connectionStrings);
                     break;
                 }
             }
-
-            DisplaySettingsMenu();
         }
-
 
         static void DisplaySetRemoteDbMenu()
         {
             while (true)
             {
                 ShowHeader();
-                Console.WriteLine($"Current remote connection string: \n{connectionStrings.RemoteDbPath}\n");
-                Console.WriteLine("Enter your remote Db connection string or [x] to return to the settings menu:");
-                var userInput = Console.ReadLine() ?? string.Empty;
-
-                if (userInput == "x")
+                Console.WriteLine("Enter the name of the remote Db (maps to the name in the connection string) [x] to return to the settings menu:");
+                var userInput1 = Console.ReadLine() ?? string.Empty;
+                if (userInput1 == "x")
                 {
                     Console.Clear();
                     break;
                 }
                 else
                 {
-                    connectionStrings.RemoteDbPath = userInput;
+                    connectionStrings.RemoteDbName = userInput1;
+                }
+
+                Console.WriteLine($"Current Remote Db connection string: \n{connectionStrings.RemoteDb}\n");
+                Console.WriteLine("Enter your remote Db connection string or [x] to return to the settings menu:");
+                var userInput2 = Console.ReadLine() ?? string.Empty;
+
+                if (userInput2 == "x")
+                {
+                    Console.Clear();
+                    break;
+                }
+                else
+                {
+                    connectionStrings.RemoteDb = userInput2;
                     connectionStrings.CurrentDb = "remote Db";
                     SaveConnectionStrings(connectionStrings);
                     break;
                 }
             }
         }
-
 
         static void DisplaySetProjectPath()
         {
@@ -263,16 +284,32 @@ namespace DbBuddy
 
         static void ToggleLocalDbActive()
         {
+            connectionStrings = ReadConnectionStrings();
             connectionStrings.CurrentDb = "Local Db";
+            if (string.IsNullOrWhiteSpace(connectionStrings.ConfigPath))
+            {
+                Console.WriteLine("Web.config path is not set.");
+                return;
+            }
             ReplaceConnectionStringsBlock(connectionStrings.ConfigPath, CreateConnectionStringBlock(true));
             SaveConnectionStrings(connectionStrings);
+            Console.WriteLine("Active Db set to Local Db.\n");
+            Console.WriteLine($"Local Db connection string: \n\t{connectionStrings.LocalDb}");
         }
 
         static void ToggleRemoteDbActive()
         {
+            connectionStrings = ReadConnectionStrings();
             connectionStrings.CurrentDb = "Remote Db";
+            if (string.IsNullOrWhiteSpace(connectionStrings.ConfigPath))
+            {
+                Console.WriteLine("Web.config path is not set.");
+                return;
+            }
             ReplaceConnectionStringsBlock(connectionStrings.ConfigPath, CreateConnectionStringBlock(false));
             SaveConnectionStrings(connectionStrings);
+            Console.WriteLine("Active Db set to Remote Db.\n");
+            Console.WriteLine($"Remote Db connection string: \n\t{connectionStrings.RemoteDb}");
         }
 
 
@@ -295,10 +332,12 @@ namespace DbBuddy
                 // Create file with default settings
                 var defaultSettings = new ConnectionStrings
                 {
-                    LocalDbPath = "",
-                    RemoteDbPath = "",
-                    ConfigPath = "",
-                    CurrentDb = ""
+                    LocalDb = "Default",
+                    LocalDbName = "Default",
+                    RemoteDb = "Default",
+                    RemoteDbName = "Default",
+                    ConfigPath = "Default",
+                    CurrentDb = "Default"
                 };
                 File.WriteAllText(filePath, JsonConvert.SerializeObject(defaultSettings));
             }
@@ -312,21 +351,17 @@ namespace DbBuddy
             XmlDocument doc = new XmlDocument();
             doc.Load(webConfigPath);
 
-            // Find the existing connectionStrings node
             XmlNode oldConnectionStringsNode = doc.SelectSingleNode("//connectionStrings");
 
-            // Create a new element for connectionStrings and parse the new block
             XmlElement newConnectionStringsNode = doc.CreateElement("connectionStrings");
             newConnectionStringsNode.InnerXml = newConnectionStringsBlock;
 
             if (oldConnectionStringsNode != null)
             {
-                // Replace the old node with the new one
                 doc.DocumentElement.ReplaceChild(newConnectionStringsNode, oldConnectionStringsNode);
             }
             else
             {
-                // If the connectionStrings node doesn't exist, append the new one
                 doc.DocumentElement.AppendChild(newConnectionStringsNode);
             }
 
@@ -337,13 +372,13 @@ namespace DbBuddy
 
         static string CreateConnectionStringBlock(bool isLocal)
         {
-            string connectionString = isLocal ? connectionStrings.LocalDbPath : connectionStrings.RemoteDbPath;
+            string connectionString = isLocal ? connectionStrings.LocalDb : connectionStrings.RemoteDb;
+            string dbName = isLocal ? connectionStrings?.LocalDbName : connectionStrings?.RemoteDbName;
+            string escapedConnectionString = SecurityElement.Escape(connectionString);
 
             return
-                   $"<add name=\"localDbName\" connectionString=\"{connectionString}\" providerName=\"System.Data.SqlClient\" />";
+                   $"<add name=\"{dbName}\" connectionString=\"{escapedConnectionString}\" providerName=\"System.Data.SqlClient\" />";
         }
-
-
 
         static void ShowHeader()
         {

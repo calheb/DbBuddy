@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "DbBuddy"
-#define MyAppVersion "1.0"
+#define MyAppVersion "0.1.1"
 #define MyAppPublisher "Caleb Hebert"
 #define MyAppURL "https://github.com/calheb/DbBuddy"
 #define MyAppExeName "dbb.exe"
@@ -25,7 +25,7 @@ LicenseFile=C:\Users\Caleb\source\repos\DbBuddy\LICENSE.txt
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\Caleb\Desktop
-OutputBaseFilename=DbBuddy_v1.0_windows
+OutputBaseFilename=DbBuddy_v0.1.1_windows
 ;SetupIconFile=DbBuddy_v1.0_windows_x64
 Compression=lzma
 SolidCompression=yes
@@ -37,7 +37,7 @@ AlwaysRestart=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+;Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 Source: "C:\Users\Caleb\source\repos\DbBuddy\DbBuddy\bin\Release\net8.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
@@ -50,7 +50,7 @@ Source: "C:\Users\Caleb\source\repos\DbBuddy\DbBuddy\bin\Release\net8.0\Newtonso
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+;Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Code]
 function NeedsAddPathHKCU(Param: string): boolean;

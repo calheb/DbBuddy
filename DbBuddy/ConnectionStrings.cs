@@ -11,12 +11,22 @@ namespace DbBuddy
         /// <summary>
         /// User's complete connection string to their Local Db.
         /// </summary>
-        public string LocalDbPath { get; set; }
+        public string LocalDb { get; set; }
+
+        /// <summary>
+        /// Name of the user's local Db.
+        /// </summary>
+        public string? LocalDbName { get; set; }
 
         /// <summary>
         /// User's complete connection string to their Remote Db.
         /// </summary>
-        public string RemoteDbPath { get; set; }
+        public string RemoteDb { get; set; }
+
+        /// <summary>
+        /// Name of the user's remote Db.
+        /// </summary>
+        public string? RemoteDbName { get; set; }
 
         /// <summary>
         /// Path to the User's web.config file.
