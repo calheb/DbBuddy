@@ -18,6 +18,7 @@ the easiest way to swap connection strings
 When working with a development and local database copy, it can be cumbersome to constantly copy and paste new connection strings.
 Use a terminal command instead.
 
+<--- WIP --->
 
 ## Installation
 
