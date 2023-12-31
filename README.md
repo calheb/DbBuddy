@@ -92,7 +92,7 @@ Distributed under the MIT license. See `LICENSE` for more information.
 [https://github.com/calheb/](https://github.com/calheb/)
 
 ## Contributing
-
+Right now the tool is set up for my (fairly specific) use case, but if you'd like to add a feature, here's how.
 1. Fork it (<https://github.com/calheb/DbBuddy/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
