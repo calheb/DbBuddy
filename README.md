@@ -20,7 +20,7 @@ Use a terminal command instead.
 
 ## Installation
 
-Install the latest ![release](https://github.com/calheb/DbBuddy/releases/download/1.0/DbBuddy_v1.0_windows_installer.exe), or clone this repo and build from source.
+Install the latest ![release](https://github.com/calheb/DbBuddy/releases/), or clone this repo and build from source.
 <p>Currently available on Windows.</p>
 
 ## Usage
