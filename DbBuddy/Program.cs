@@ -32,7 +32,6 @@ namespace DbBuddy
                             }
                         }
                         break;
-                    // You can add more cases here for other commands.
                     default:
                         Console.WriteLine("Invalid command");
                         break;
@@ -41,8 +40,6 @@ namespace DbBuddy
             else
             {
                 Console.WriteLine(@"usage: dbb [start] [set local] [set remote]");
-                // Optionally, start the main menu by default if no arguments are provided.
-                // DisplayMainMenu();
             }
         }
 
