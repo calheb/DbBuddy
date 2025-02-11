@@ -15,16 +15,16 @@ the easiest way to swap connection strings
 
 </div>
 
-When working with a development and local database copy, it can be cumbersome to constantly copy and paste new connection strings.
+When working with a both a remote development and local database copy in ASP.NET, it can be cumbersome to manually update connection strings.
 Use a terminal command instead.
 
 ## Installation
 
 Install the latest ![release](https://github.com/calheb/DbBuddy/releases/), or clone this repo and build from source.
-<p>Currently available on Windows.</p>
+<p>This tool is availably on Windows.</p>
 
 ## Usage
-To view command line arguments
+To view command line usage
 
 ```
 dbb
@@ -33,42 +33,9 @@ dbb
 ### Command-line Arguments
 The installer automatically adds DbBuddy to your system's PATH, allowing for simple command-line interaction.
 
-To activate the setup interface
-```
-dbb start
-```
-```
-  ____  _     ____            _     _
- |  _ \| |__ | __ ) _   _  __| | __| |_   _
- | | | | '_ \|  _ \| | | |/ _` |/ _` | | | |
- | |_| | |_) | |_) | |_| | (_| | (_| | |_| |
- |____/|_.__/|____/ \__,_|\__,_|\__,_|\__, |
-                                      |___/
+First, set up your databases in the json configuration file `connectionStrings.json`.
 
-Current Db: Local Db
-
-Main Menu
----------
-Select an option:
-[1] Local Db
-[2] Remote Db
-[3] Settings
-[4] Exit
-
-```
-Once the connection strings have been set, simply toggle back and forth with 
-
-```
-dbb set local
-```
-
-(or)
-
-```
-dbb set remote
-```
-
-The Db settings can be set through either the interface with (```dbb start```), or by manually editing the json file located in the installation folder.
+The database settings can be set by manually editing the json file located in the installation folder.
 (Run the program to generate a file with blank defaults, or create one.
 
 ### Sample connectionStrings.json file
@@ -83,6 +50,17 @@ The Db settings can be set through either the interface with (```dbb start```), 
   "CurrentDb": "Local Db"
 }
 ```
+Once the connection strings have been set, simply toggle back and forth with 
+
+```
+dbb set local
+```
+
+(or)
+
+```
+dbb set remote
+```
 
 ## Meta
 
@@ -92,13 +70,6 @@ Distributed under the MIT license. See `LICENSE` for more information.
 
 [https://github.com/calheb/](https://github.com/calheb/)
 
-## Contributing
-Right now the tool is set up for my (fairly specific) use case, but if you'd like to add a feature, here's how.
-1. Fork it (<https://github.com/calheb/DbBuddy/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
 
-## Disclaimer
-Windows Defender may flag the installer for being unrecognized.
+## Note
+Windows Defender may flag the installer as unrecognized.
